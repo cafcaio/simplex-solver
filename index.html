@@ -1,13 +1,50 @@
 <html>
 
 <head>
+  <script src="jquery-3.3.1.min.js"></script>
   <script src="library.js"></script>
-  <script src="po.js"></script>
-  <script src="jquery-3.3.1.js"></script>
+  <script src="pageCreation.js"></script>
+  <script src="sketch.js"></script>
+  <link href="style.css" type="text/css" rel="stylesheet">
 
 </head>
 
 <body>
+  <h1> Simplex Solver </h1>
+  <p> Insira o quadro inicial abaixo. Variáveis com a letra a/A serão consideradas artificiais, caso estejam presentes.</p>
+  <p> Recomenda-se a utilização de variáveis na seguinte forma: </p>
+  <ul>
+    <li>X1, X2, X3... para variáveis de decisão </li>
+    <li> XF4, XF5, XF6... para variáveis de folga </li>
+    <li> XA7, XA8, XA9... para variáveis artificiais </li>
+  </ul>
+
+  <div id="buttons-container">
+    <ul id="buttons-holder">
+
+      <li id="artificial-button">Uma fase</li>
+
+      <li id="add-cols">+</li>
+      <li id="cols-label">Colunas</li>
+      <li id="erase-cols">-</li>
+
+      <li id="add-rows">+</li>
+      <li id="rows-label">Linhas</li>
+      <li id="erase-rows">-</li>
+
+      <li id="reset-table">Resetar</li>
+
+      <li id="submit-button"> Resolver </li>
+    </ul>
+  </div>
+
+  <div id="inputs_array">
+  </div>
+
+
+
+  <div id="table_container">
+  </div>
 </body>
 
 </html>

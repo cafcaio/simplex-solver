@@ -1,0 +1,90 @@
+/* tableaus */
+
+#table_container {
+  width: 65%;
+  margin: 0 auto;
+}
+
+.tableau {
+  width: 100%;
+  table-layout: fixed;
+  margin: 25px auto;
+  border-collapse: collapse;
+}
+
+.tableau td {
+  height: 30px;
+  text-align: center;
+  border: 0;
+  border-collapse: collapse;
+  border-bottom: 1px solid #e5e3e3;
+}
+
+.header {
+  background-color: #5780c1;
+  color: #ffffff;
+}
+
+.counter {
+  background-color: #2aaf73;
+  color: #ffffff;
+}
+
+.pivotRow {
+  background-color: #a4f751;
+}
+
+.enteringVarHead {
+  background-color: #8e2218;
+}
+
+/* inputs */
+
+#inputs_array {
+  width: 100%;
+  margin: 0 auto;
+  min-height: 200px;
+}
+
+#inputsTable {
+  width: 60%;
+  margin: 0 auto;
+  margin-bottom: 30px;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+#inputsTable td {
+  min-width: 40px;
+  padding: 3px;
+  text-align: center;
+  border: 1px solid black;
+}
+
+#inputsTable input {
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* buttons */
+
+#buttons-holder {
+  padding: 0px;
+  width: 100%;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#buttons-holder li {
+  cursor: pointer;
+  display: inline-block;
+  padding: 5px 10px;
+  background-color: #d4ffc1;
+  user-select: none;
+  border: 1px solid #42f4b9;
+}
+
+#erase-cols, #erase-rows, #reset-table, #artificial-button {
+  margin-right: 20px;
+}
