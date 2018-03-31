@@ -4,7 +4,9 @@ function extractDataFromRawTable(rawTable) {
   standard_vars.shift();
 
   let start;
-  copy[0][0] == "FOA" ? start = 2 : start = 1;
+  let isArtificial = copy[0][0] == "FOA";
+  isArtificial == true ? start = 2 : start = 1;
+
 
   let base_vars = [];
   let aux;
@@ -25,9 +27,11 @@ function extractDataFromRawTable(rawTable) {
 
   let artificial_vars = [];
 
-  for (let i = 0; i < standard_vars.length; i++) {
-    if (/a/i.test(standard_vars[i]) == true) {
-      artificial_vars.push(standard_vars[i]);
+  if (isArtificial == true) {
+    for (let i = 0; i < standard_vars.length; i++) {
+      if (/a/i.test(standard_vars[i]) == true) {
+        artificial_vars.push(standard_vars[i]);
+      }
     }
   }
 
@@ -208,7 +212,6 @@ class Tableau {
     }
 
     this.artificial = false;
-    console.log("fui executado");
   }
 
   isColBasic(col) {
@@ -248,12 +251,21 @@ class Tableau {
 
 
   getZValue() {
-
     if (this.artificial == true) {
-      return this.tableau[1][this.cols - 1];
+      return this.tableau[1][1] * this.tableau[1][this.cols - 1];
     } else {
-      return this.tableau[0][this.cols - 1];
+      return this.tableau[0][0] * this.tableau[0][this.cols - 1];
     }
+  }
+
+  minOrMax(){
+    let signal;
+    let result;
+    this.artificial == true ? signal = Math.sign(this.tableau[1][1]) : signal = Math.sign(this.tableau[0][0]);
+    signal == -1 ? result = "MIN" : result = "MAX";
+
+    return result;
+
   }
 
 
@@ -278,6 +290,19 @@ class Tableau {
     }
 
     return result;
+  }
+
+
+  hasMultipleSolutions() {
+    let vars = this.getVarsValuesAndState();
+    let colInTableau;
+    for (let i = 0; i < vars.length; i++) {
+      colInTableau = this.standard_vars.indexOf(vars[i][0]);
+      if (this.tableau[0][colInTableau] == 0 && vars[i][2] == "VNB") {
+        return true;
+      }
+    }
+    return false;
   }
 
 

@@ -98,18 +98,38 @@ function eraseInputRow() {
   $(".inputRow:last-child").remove();
 }
 
+function createVarTable(quadro) {
+  let vars = quadro.getVarsValuesAndState();
+  let varLine = "<tr class='header'><td>" + "<strong>Z*</strong>" + "</td>";
+  let valueLine = "<tr><td>" + parseFloat(quadro.getZValue().toFixed(4))+ "</td>";
+  let statusLine = "<tr><td>" + quadro.minOrMax() + "</td>";
+  for (let i = 0; i < vars.length; i++) {
+    varLine += "<td>" + vars[i][0] + "</td>";
+    valueLine += "<td>" + parseFloat(vars[i][1].toFixed(4)) + "</td>";
+    statusLine += "<td>" + vars[i][2] + "</td>";
+  }
+
+  varLine += "</tr>";
+  valueLine += "</tr>";
+  statusLine += "</tr>";
+
+  varLine = "<table class='varTable'>" + varLine + valueLine + statusLine + "<table>"; //used as sum
+
+  $("#table_container").append(varLine);
+
+}
 
 function readRawTable() {
   let result = [];
   let rows = $(".inputRow").length;
   let cols = $(".inputRow:last-child td").length;
   let element;
-  for(let i=0; i<rows; i++){
+  for (let i = 0; i < rows; i++) {
     result.push([]);
-    for(let j=0; j<cols; j++){
-      element = $(".to-be-read").eq(i*cols + j).val();
-      if(element==""){
-        element = $(".to-be-read").eq(i*cols + j).text();
+    for (let j = 0; j < cols; j++) {
+      element = $(".to-be-read").eq(i * cols + j).val();
+      if (element == "") {
+        element = $(".to-be-read").eq(i * cols + j).text();
       }
       result[i].push(element);
     }

@@ -6,23 +6,29 @@
   <script src="pageCreation.js"></script>
   <script src="sketch.js"></script>
   <link href="style.css" type="text/css" rel="stylesheet">
+  <title> Simplex Solver - Portal da monitoria de PO I</title>
 
 </head>
 
 <body>
   <div id="title">
-  <h1> Simplex Solver </h1>
-</div>
+    <h1> Simplex Solver </h1>
+  </div>
 
-<div id="instructions">
-  <p> Insira o quadro inicial abaixo. Variáveis com a letra a/A serão consideradas artificiais, caso estejam presentes.</p>
-  <p> Recomenda-se a utilização de variáveis na seguinte forma: </p>
-  <ul>
-    <li>X1, X2, X3... para variáveis de decisão </li>
-    <li> XF4, XF5, XF6... para variáveis de folga </li>
-    <li> XA7, XA8, XA9... para variáveis artificiais </li>
-  </ul>
-</div>
+  <div id="instructions">
+    <p> Insira o quadro inicial abaixo, conforme as instruções a seguir. </p>
+    <ol>
+      <li>Todas as variáveis de decisão, folga e artificiais devem estar na primeira linha;</li>
+      <li>Todas as variáveis da base inicial devem estar na primeira coluna;</li>
+      <li> É recomendado que se use <strong>X1, X2...</strong> para variáveis de decisão e <strong>XF3, XF4... </strong> para variáveis de folga. </li>
+      <li>Variáveis com a letra A inclusa serão consideradas artificiais. Esse tipo de variável é fundamental em problemas de duas fases. Recomenda-se usar as variáveis na forma <strong>XA5, XA6...;</strong></li>
+      <li> Condições de não-negatividade são assumidas por padrão. </li>
+    </ol>
+    <p>Tenha cuidado ao preencher a tabela! A primeira linha e a primeira coluna deve conter somente texto, e o restante das células, somente números. Além disso, as variáveis da base devem corresponder às variáveis da primeira linha. Este programa está
+      em fase inicial e, no momento, não apresenta qualquer manipulação de erros. </p>
+
+    <p> Planeja-se implementar um método de entrada que usa as restrições (inequações) em vez de usar a forma de tableau. </p>
+  </div>
 
   <div id="buttons-container">
     <ul id="buttons-holder">

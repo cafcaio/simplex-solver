@@ -16,13 +16,14 @@
   display: flex;
   flex-flow: column;
   align-items: center;
-  height: 200px;
-  background-color:#cedaef;
+  padding: 20px;
+  height: 225px;
   margin-bottom: 30px;
 }
 
-#instructions li {
-  list-style-type: none;
+
+#instructions p {
+  margin: 5px;
 }
 
 
@@ -33,19 +34,19 @@
   margin: 0 auto;
 }
 
-.tableau {
+.tableau, .varTable {
   width: 100%;
   table-layout: fixed;
   margin: 25px auto;
   border-collapse: collapse;
 }
 
-.tableau td {
+.tableau td, .varTable td {
   height: 30px;
   text-align: center;
   border: 0;
   border-collapse: collapse;
-  border-bottom: 1px solid #e5e3e3;
+  border-bottom: 1px solid #a3a3a3;
 }
 
 .header {
