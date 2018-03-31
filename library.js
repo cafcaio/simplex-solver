@@ -4,7 +4,7 @@ function extractDataFromRawTable(rawTable) {
   standard_vars.shift();
 
   let start;
-  rawTable[0][0] == "FOA" ? start = 2 : start = 1;
+  copy[0][0] == "FOA" ? start = 2 : start = 1;
 
   let base_vars = [];
   let aux;
@@ -44,15 +44,15 @@ class Tableau {
     this.base_vars = Tableau.deepCopy(base_vars);
     for (let i = 0; i < this.standard_vars.length; i++) this.standard_vars[i] = this.standard_vars[i].toUpperCase();
     for (let i = 0; i < this.base_vars.length; i++) this.base_vars[i] = this.base_vars[i].toUpperCase();
-
+    this.artificial = false;
     if (artificial_vars.length == 0) {
       this.artificial = false;
       this.artificial_vars = [];
     } else {
       this.artificial = true;
-      this.artificial_vars = deepCopy(artificial_vars);
-
+      this.artificial_vars = Tableau.deepCopy(artificial_vars);
     }
+    for (let i = 0; i < this.artificial_vars.length; i++) this.artificial_vars[i] = this.artificial_vars[i].toUpperCase();
   }
 
 
@@ -109,6 +109,16 @@ class Tableau {
 
   choosePivotRow(col) {
     let ratios = this.findRatios(col);
+
+    let isThereValidRatios = false;
+    for (let i = 0; i < ratios.length; i++) {
+      if (ratios[i] > 0 && ratios[i] < Infinity) {
+        isThereValidRatios = true;
+        break;
+      }
+    }
+    if (isThereValidRatios == false) return -1;
+
     let currentMinimum = Infinity;
     let minIndex;
     for (let i = 0; i < ratios.length; i++) {
@@ -122,7 +132,9 @@ class Tableau {
   }
 
   chooseEnteringVar() { //chooses based on fastest optimization method, use only if isOptimal = false
-    let index = this.tableau[0].indexOf(Math.min.apply(null, this.tableau[0]));
+    let start;
+    this.artificial == false ? start = 1 : start = 2;
+    let index = this.tableau[0].indexOf(Math.min.apply(null, this.tableau[0].slice(start, -1)));
     return index;
   }
 
@@ -173,16 +185,99 @@ class Tableau {
   }
 
   reduceForSecondPhase() {
-    let currentIndex;
-    for (let a = 0; a < this.artificial_vars.length; a++) {
-      currentIndex = standard_vars.indexOf(this.artificial_vars[a]);
-      this.cols -= 1;
-      for (let i = 0; i < this.rows; i++) this.tableau[i].splice(currentIndex, 1);
-    }
 
+    //remove linha da FOA
     this.tableau.shift();
     this.rows -= 1;
+
+    //remove coluna do W
+    for (let i = 0; i < this.rows; i++) this.tableau[i].splice(0, 1);
+    this.standard_vars.splice(0, 1); //remove coluna do W
+    this.cols -= 1;
+
+    //remove cada coluna de variável artificial
+    let currentIndex;
+    for (let a = 0; a < this.artificial_vars.length; a++) {
+
+      currentIndex = this.standard_vars.indexOf(this.artificial_vars[a]); //encontra índice
+      this.standard_vars.splice(currentIndex, 1); //remove entrada na lista de variáveis
+
+      for (let i = 0; i < this.rows; i++) this.tableau[i].splice(currentIndex, 1); //remove coluna relativa ao índice
+      this.cols -= 1;
+
+    }
+
     this.artificial = false;
+    console.log("fui executado");
+  }
+
+  isColBasic(col) {
+    let label = this.standard_vars[col];
+    let baseIndex = this.base_vars.indexOf(label);
+    this.artificial == true ? baseIndex += 2 : baseIndex += 1;
+    for (let i = 0; i < this.rows; i++) {
+      if (i != baseIndex && this.tableau[i][col] != 0) {
+        return false;
+      }
+      if (i == baseIndex && this.tableau[i][col] != 1) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  makeArtificialBasic() {
+    let toMakeBasic;
+    let column;
+    let row;
+    for (let a = 0; a < this.artificial_vars.length; a++) {
+      toMakeBasic = this.artificial_vars[a];
+      column = this.standard_vars.indexOf(toMakeBasic);
+      row = this.base_vars.indexOf(toMakeBasic) + 2;
+      this.makeVarBasic(row, column);
+    }
+  }
+
+  getWValue() {
+    if (this.artificial == true) {
+      return this.tableau[0][this.cols - 1];
+    } else {
+      return undefined;
+    }
+  }
+
+
+  getZValue() {
+
+    if (this.artificial == true) {
+      return this.tableau[1][this.cols - 1];
+    } else {
+      return this.tableau[0][this.cols - 1];
+    }
+  }
+
+
+
+  getVarsValuesAndState() { //returns [varName, varValue, varState]
+    let start;
+    this.artificial == false ? start = 1 : start = 2;
+    let result = [];
+    let currentVar;
+    let baseIndex;
+    for (let i = start; i < this.standard_vars.length - 1; i++) { //starts at x1 and ends before B
+      currentVar = this.standard_vars[i];
+      baseIndex = this.base_vars.indexOf(currentVar);
+      if (baseIndex != -1) {
+        baseIndex += start;
+        result.push([currentVar, this.tableau[baseIndex][this.cols - 1], "VB"]);
+      } else {
+        result.push([currentVar, 0, "VNB"]);
+      }
+
+
+    }
+
+    return result;
   }
 
 

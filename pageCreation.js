@@ -26,17 +26,8 @@ function printStepTableau(quadro, enteringVar, toBePivotRow, iterations) { //arg
   $(".tableau:last-child").prepend("<tr><td>Quadro " + iterations + "</td></tr>");
   $(".tableau:last-child tr:first-child").addClass("counter");
 
-  let artificial = quadro.artificial;
-  let printedTableRow;
-  let printedTableCol;
-
-  if (artificial == false) {
-    printedTableRow = toBePivotRow + 2;
-    printedTableCol = enteringVar + 1;
-  } else {
-    printedTableRow = toBePivotRow + 3;
-    printedTableCol = enteringVar + 2;
-  }
+  let printedTableRow = toBePivotRow + 2;
+  let printedTableCol = enteringVar + 1;
 
   $(".tableau:last-child tr").eq(printedTableRow).addClass("pivotRow");
   $(".tableau:last-child tr:nth-child(2) td").eq(printedTableCol).addClass("enteringVarHead");
@@ -154,8 +145,10 @@ function inputSetup() {
   //reset button
   $("#reset-table").click(function() {
     $("#inputsTable").remove();
-    createInputsArray(defaultRows, defaultCols);
-    iterations = 1;
+    createInputsArray(defaultRows, defaultCols, false);
+    iterations = 0;
+    isArtificial = false;
+    phaseText = "Uma fase";
     $("#table_container").empty();
 
   });
