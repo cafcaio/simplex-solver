@@ -1,3 +1,5 @@
+
+
 function extractDataFromRawTable(rawTable) {
   let copy = Tableau.deepCopy(rawTable);
   let standard_vars = copy.shift();

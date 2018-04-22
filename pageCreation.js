@@ -63,7 +63,81 @@ function createVarTable(quadro) {
 }
 
 // entrada usando restrições e função objetivo
+function isVdsInvalid(vdsread){
+  if(isNaN(vdsread) || vdsread <= 0){
+    return true;
+  }
+  return false;
+}
 
+function isConstsInvalid(constsread){
+  if(isNaN(constsread) || constsread <= 0){
+    return true;
+  }
+  return false;
+}
+
+function isOFValid(vars){
+  for(let j=0; j<vars; j++){
+    if($(".of-values").eq(j).val() != ""){
+      return true;
+    }
+  }
+  return false;
+}
+
+
+function invalidBs(consts){
+  let answer = [];
+  for(let i=0; i<consts; i++){
+    let currentBValue = $(".b-values").eq(i).val();
+    currentBValue = parseFloat(currentBValue);
+    if(isNaN(currentBValue)) currentBValue = 0;
+    if(currentBValue <= 0){
+      answer.push(i);
+    }
+
+  }
+  for(let i=0; i<answer.length; i++){
+    answer[i] += 1;
+  }
+  return answer;
+}
+
+function invalidConsts(vars, consts){
+  let answer = [];
+  for(let i=0; i<consts; i++){
+    let lineInvalid = true;
+    for(let j=0; j<vars; j++){
+      let value = $(".const-values").eq(i * vars + j).val();
+      value = parseFloat(value);
+      if(isNaN(value)) value = 0;
+      if(value > 0){
+        lineInvalid = false;
+        break;
+      }
+    }
+    if(lineInvalid) answer.push(i);
+  }
+  for(let i=0; i<answer.length; i++){
+    answer[i] += 1;
+  }
+  return answer;
+}
+
+function insertNotification(text){
+  let string = "<div class='notification'>";
+  string += "<p>";
+  string += text;
+  string += "</p>";
+
+  $("#notifications-container").append(string);
+}
+
+
+function clearNotifications(){
+  $("#notifications-container").empty();
+}
 
 function createFunctionAndConstraints(vars, constraints) {
   $("#second-input-container").append("<p> Função objetivo <br></p>");
@@ -92,7 +166,7 @@ function createFunctionAndConstraints(vars, constraints) {
 
 
   for (let i = 0; i < constraints; i++) {
-    currentLine = "<p>";
+    currentLine = "<p><span class='const-item'>(R" + (i+1) + ") </span>";
     for (let j = 0; j < varsSymbols.length; j++) {
       currentLine += "<input class=\"const-values\" type=\"number\" size=2 placeholder=\"0\">";
       currentLine += " " + varsSymbols[j];
