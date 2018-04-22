@@ -42,19 +42,56 @@ var toBePivotRow;
 
 var quadro;
 
+var read;
+
 var specialCase = false;
 
 
 $(document).ready(function() {
 
-  inputSetup();
-  $("#submit-button").click(function() {
+  //inputSetup();
+let vdsread;
+let constsread;
+
+$("#big-container").hide();
+
+
+  $("#first-input-submit-button").click(function() {
+    vdsread = readFirstInput()[0];
+    constsread = readFirstInput()[1];
+
+    $("#first-input-container").hide();
+    $("#big-container").show();
+    createFunctionAndConstraints(vdsread, constsread);
+  });
+
+
+  $("#big-container").on("click", "#second-input-empty-button", function() {
+    $("#second-input-container").empty();
+    createFunctionAndConstraints(vdsread, constsread);
+  });
+
+
+  $("#big-container").on("click", "#second-input-restart-button", function() {
+    $("#second-input-container").empty();
+    $("#big-container").hide();
+    $("#first-input-container").show();
+  });
+
+
+  $("#big-container").on("click", "#second-input-submit-button", function() {
+
+
     $("#table_container").empty(); //limpa container
     iterations = 0;
     specialCase = false;
 
-    let rawTable = extractDataFromRawTable(readRawTable());
-    quadro = new Tableau(rawTable[0], rawTable[1], rawTable[2], rawTable[3]);
+    read = readTableInput(vdsread, constsread);
+
+    console.log("read[0]");
+    console.table(read[0]);
+
+    quadro = new Tableau(read[0], read[1], read[2], read[3]);
 
 
     //prints inserted table
