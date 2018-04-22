@@ -41,63 +41,6 @@ function printSingleTableau(quadro, iterations) {
   $(".tableau tr:first-child").addClass("counter");
 }
 
-
-function createInputsArray(rows, cols, isArtificial) {
-
-  let content = "<table>";
-  for (let i = 0; i < rows; i++) {
-    content += '<tr class="inputRow">';
-    for (let j = 0; j < cols; j++) {
-      content += '<td><input type="text" class="to-be-read"></td>';
-    }
-    content += "</tr>";
-  }
-  $("#inputs_array").append(content);
-  $("#inputs_array table").attr("id", "inputsTable");
-  $("#inputs_array input").attr("size", 2);
-
-  createHeaders(isArtificial);
-
-}
-
-function createHeaders(isArtificial) {
-  $(".inputRow:first-child td:first-child").empty().text("VB").addClass("to-be-read");
-  $(".inputRow:first-child td:last-child").empty().text("B").addClass("to-be-read");
-  if (isArtificial == true) {
-    $(".inputRow:first-child td:nth-child(2)").empty().text("W").addClass("to-be-read");
-    $(".inputRow:first-child td:nth-child(3)").empty().text("Z").addClass("to-be-read");
-    $(".inputRow:nth-child(2) td:first-child").empty().text("FOA").addClass("to-be-read");
-    $(".inputRow:nth-child(3) td:first-child").empty().text("FO").addClass("to-be-read");
-  } else {
-    $(".inputRow:nth-child(1) td:nth-child(2)").empty().text("Z").addClass("to-be-read");
-    $(".inputRow:nth-child(2) td:first-child").empty().text("FO").addClass("to-be-read");
-  }
-}
-
-function addInputColumn() {
-  $(".inputRow td:last-child").before('<td><input type="text" class="to-be-read"></td>');
-  $("#inputs_array input").attr("size", 2);
-}
-
-function eraseInputColumn() {
-  $(".inputRow td:nth-last-child(2)").remove();
-}
-
-function addInputRow() {
-  let cols = $(".inputRow:last-child td").length;
-  let content = '<tr class="inputRow">';
-  for (let j = 0; j < cols; j++) {
-    content += '<td><input type="text" size=2></td>';
-  }
-  content += "</tr>";
-  $("#inputsTable").append(content);
-  $("#inputsTable tr:last-child input").addClass("to-be-read");
-}
-
-function eraseInputRow() {
-  $(".inputRow:last-child").remove();
-}
-
 function createVarTable(quadro) {
   let vars = quadro.getVarsValuesAndState();
   let varLine = "<tr class='header'><td>" + "<strong>Z*</strong>" + "</td>";
@@ -117,71 +60,6 @@ function createVarTable(quadro) {
 
   $("#table_container").append(varLine);
 
-}
-
-function readRawTable() {
-  let result = [];
-  let rows = $(".inputRow").length;
-  let cols = $(".inputRow:last-child td").length;
-  let element;
-  for (let i = 0; i < rows; i++) {
-    result.push([]);
-    for (let j = 0; j < cols; j++) {
-      element = $(".to-be-read").eq(i * cols + j).val();
-      if (element == "") {
-        element = $(".to-be-read").eq(i * cols + j).text();
-      }
-      result[i].push(element);
-    }
-  }
-  return result;
-}
-
-function inputSetup() {
-  //input array and buttons creation
-  let isArtificial = false; //starting values
-  let phaseText = "Uma fase";
-
-  createInputsArray(defaultRows, defaultCols, isArtificial);
-
-  $("#add-cols").click(addInputColumn);
-
-  $("#erase-cols").click(function() {
-    if ($(".inputRow:first td").length > defaultCols) {
-      eraseInputColumn();
-    }
-  });
-
-  $("#add-rows").click(addInputRow);
-
-  //erase rows
-  $("#erase-rows").click(function() {
-    let rows = $(".inputRow").length;
-    if (rows > defaultRows) {
-      eraseInputRow();
-    }
-  });
-
-  //reset button
-  $("#reset-table").click(function() {
-    $("#inputsTable").remove();
-    createInputsArray(defaultRows, defaultCols, false);
-    iterations = 0;
-    isArtificial = false;
-    phaseText = "Uma fase";
-    $("#table_container").empty();
-
-  });
-
-  //artificial buttons
-  $("#artificial-button").click(function() {
-    isArtificial = !isArtificial;
-    phaseText == "Uma fase" ? phaseText = "Duas fases" : phaseText = "Uma fase";
-    $(this).text(phaseText);
-    $("#inputsTable").remove();
-    createInputsArray(defaultRows, defaultCols, isArtificial);
-
-  });
 }
 
 // entrada usando restrições e função objetivo
@@ -234,6 +112,12 @@ function createFunctionAndConstraints(vars, constraints) {
   $("#second-input-container").append(content);
 
 
+}
+
+function readFirstInput() {
+  let vds = parseFloat($("#vds-read").val());
+  let consts = parseFloat($("#consts-read").val());
+  return [vds, consts];
 }
 
 function readTableInput(vars, consts) {
@@ -385,37 +269,31 @@ function readTableInput(vars, consts) {
     }
   }
 
-if(artificial_vars.length != 0){
-  input_table[0].push(0);
-  input_table[1].push(0);
-  for (let i = 0; i < consts; i++) {
-    let value = parseFloat($(".b-values").eq(i).val());
-    if (isNaN(value)) {
-      input_table[i+2].push(0);
-    } else {
-      input_table[i+2].push(value);
+  if (artificial_vars.length != 0) {
+    input_table[0].push(0);
+    input_table[1].push(0);
+    for (let i = 0; i < consts; i++) {
+      let value = parseFloat($(".b-values").eq(i).val());
+      if (isNaN(value)) {
+        input_table[i + 2].push(0);
+      } else {
+        input_table[i + 2].push(value);
+      }
+    }
+  } else {
+    input_table[0].push(0);
+    for (let i = 0; i < consts; i++) {
+      let value = parseFloat($(".b-values").eq(i).val());
+      if (isNaN(value)) {
+        input_table[i + 1].push(0);
+      } else {
+        input_table[i + 1].push(value);
+      }
     }
   }
-} else {
-  input_table[0].push(0);
-  for (let i = 0; i < consts; i++) {
-    let value = parseFloat($(".b-values").eq(i).val());
-    if (isNaN(value)) {
-      input_table[i+1].push(0);
-    } else {
-      input_table[i+1].push(value);
-    }
-  }
-}
 
   standard_vars.push("B");
 
   return [input_table, standard_vars, base_vars, artificial_vars];
 
-}
-
-function readFirstInput() {
-  let vds = parseFloat($("#vds-read").val());
-  let consts = parseFloat($("#consts-read").val());
-  return [vds, consts];
 }

@@ -32,9 +32,6 @@
 // console.log("Quadro 1");
 // quadro.print();
 
-var defaultRows = 4;
-var defaultCols = 7;
-
 var iterations;
 
 var enteringVar;

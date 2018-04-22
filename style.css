@@ -46,7 +46,7 @@ select {
   align-items: center;
   padding: 20px;
   min-height: 225px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;;
 }
 
 #instructions p {

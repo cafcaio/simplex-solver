@@ -16,18 +16,20 @@
   </div>
 
   <div id="instructions">
-    <p> Insira o quadro inicial abaixo, conforme as instruções a seguir. </p>
+    <p> Insira a função objetivo e as restrições conforme as recomendações a seguir. </p>
     <ol>
-      <li>Todas as variáveis de decisão, folga e artificiais devem estar na primeira linha;</li>
-      <li>Todas as variáveis da base inicial devem estar na primeira coluna;</li>
-      <li> É recomendado que se use <strong>X1, X2...</strong> para variáveis de decisão e <strong>XF3, XF4... </strong> para variáveis de folga. </li>
-      <li>Variáveis com a letra A inclusa serão consideradas artificiais. Esse tipo de variável é fundamental em problemas de duas fases. Recomenda-se usar as variáveis na forma <strong>XA5, XA6...;</strong></li>
-      <li> Condições de não-negatividade são assumidas por padrão. </li>
+      <li>Todas as variáveis de decisão são consideradas <strong>não-negativas</strong>;</li>
+      <li>Caso seja necessário contabilizar uma variável de decisão sem restrição de sinal, substitua em seu programa a variável por uma diferença de variáveis não-negativas (e.g. troque X1 por X1 - X2 em seu sistema original, faça as modificações necessárias
+        e então insira na tabela);</li>
+      <li>O segundo membro (termo independente) de cada restrição <strong>deve ser positivo</strong>. Caso uma restrição possua segundo membro negativo, multiplique por -1 e então insira a restrição resultante na tabela. Exemplo: troque 3X1 + 2X2 ≥ -4 por
+        -3X1 - 2X2 ≤ +4. Lembre-se de inverter os comparadores ≤ e ≥ ao fazer este processo!</li>
     </ol>
-    <p>Tenha cuidado ao preencher a tabela! A primeira linha e a primeira coluna deve conter somente texto, e o restante das células, somente números. Além disso, as variáveis da base devem corresponder às variáveis da primeira linha. Este programa está
-      em fase inicial e, no momento, não apresenta qualquer manipulação de erros. </p>
+    <p>
+      <i>O programa foi testado para os quatro casos principais de PPLs: única solução ótima, múltiplas soluções ótimas, solução ilimitada e solução impossível (somente para problemas de duas fases).<br>
+No momento, este programa não apresenta qualquer manuseio de entradas incorretas do usuário, e efetuará cálculos mesmo com entradas incorretas.<br></i></p>
+    Para PPLs com múltiplas soluções, pretende-se inserir mais passos, mostrando assim mais informações sobre as numerosas soluções ótimas.</i>
+    </p>
 
-    <p> Planeja-se implementar um método de entrada que usa as restrições (inequações) em vez de usar a forma de tableau. </p>
   </div>
 
   <div id="first-input-container">
@@ -40,35 +42,10 @@
 
 
 
-<div id="big-container">
-  <div id="second-input-container">
+  <div id="big-container">
+    <div id="second-input-container">
+    </div>
   </div>
-</div>
-
-
-
-  <!-- <div id="buttons-container">
-    <ul id="buttons-holder">
-
-      <li id="artificial-button">Uma fase</li>
-
-      <li id="add-cols">+</li>
-      <li id="cols-label">Colunas</li>
-      <li id="erase-cols">-</li>
-
-      <li id="add-rows">+</li>
-      <li id="rows-label">Linhas</li>
-      <li id="erase-rows">-</li>
-
-      <li id="reset-table">Resetar</li>
-
-      <li id="submit-button"> Resolver </li>
-    </ul>
-  </div> -->
-
-  <div id="inputs_array">
-  </div>
-
 
 
   <div id="table_container">
