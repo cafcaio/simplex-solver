@@ -152,9 +152,6 @@ $(document).ready(function() {
 
       read = readTableInput(vdsread, constsread);
 
-      console.log("read[0]");
-      console.table(read[0]);
-
       quadro = new Tableau(read[0], read[1], read[2], read[3]);
 
 

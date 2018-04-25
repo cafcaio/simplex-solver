@@ -139,8 +139,15 @@ class Tableau {
 
   chooseEnteringVar() { //chooses based on fastest optimization method, use only if isOptimal = false
     let start;
+    let index;
     this.artificial == false ? start = 1 : start = 2;
-    let index = this.tableau[0].indexOf(Math.min.apply(null, this.tableau[0].slice(start, -1)));
+    let minimum = Infinity;
+    for(let i=start; i < this.tableau[0].length - 1; i++){
+      if(this.tableau[0][i] < minimum){
+        index = i;
+        minimum = this.tableau[0][i];
+      }
+    }
     return index;
   }
 

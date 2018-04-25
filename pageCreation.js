@@ -8,7 +8,7 @@ function createTableFromTableau(tableauForPrinting) {
     content += "<tr>"; //opens row
     for (let j = 0; j < cols; j++) {
       if (typeof(matrix[i][j]) == "number") {
-        content += "<td>" + parseFloat(matrix[i][j].toFixed(5)) + "</td>";
+        content += "<td>" + parseFloat(matrix[i][j].toFixed(4)) + "</td>";
       } else {
         content += "<td>" + matrix[i][j] + "</td>";
       }
