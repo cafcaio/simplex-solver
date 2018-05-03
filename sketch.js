@@ -194,7 +194,7 @@ $(document).ready(function() {
         quadro.replaceBase(toBePivotRow, enteringVar);
         quadro.makeVarBasic(toBePivotRow, enteringVar);
 
-        if (quadro.artificial == true && quadro.getWValue() == 0) { //fim da primeira fase
+        if (quadro.artificial == true && isZero(quadro.getWValue()) == true) { //fim da primeira fase
           iterations++;
           printSingleTableau(quadro, iterations);
 

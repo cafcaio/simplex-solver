@@ -1,5 +1,3 @@
-
-
 function extractDataFromRawTable(rawTable) {
   let copy = Tableau.deepCopy(rawTable);
   let standard_vars = copy.shift();
@@ -40,6 +38,28 @@ function extractDataFromRawTable(rawTable) {
   return [copy, standard_vars, base_vars, artificial_vars];
 }
 
+
+var precision = 10**(-6);
+
+function isZero(value){
+  if(Math.abs(value) <= precision){
+    return true;
+  }
+
+  return false;
+}
+
+function isEqual(value1, value2){
+  if(Math.abs(value1 - value2) <= precision){
+    return true;
+  }
+  return false;
+}
+
+
+
+
+
 class Tableau {
 
   constructor(matrix, standard_vars, base_vars, artificial_vars) {
@@ -66,7 +86,7 @@ class Tableau {
     let start;
     this.artificial == false ? start = 1 : start = 2;
     for (let i = start; i < this.tableau[0].length - 1; i++) {
-      if (this.tableau[0][i] < 0) {
+      if (this.tableau[0][i] < -precision) {
         return false;
       }
     }
@@ -76,7 +96,7 @@ class Tableau {
   findRatios(var_index) {
     let start;
     this.artificial == false ? start = 1 : start = 2;
-    let last = this.cols - 1
+    let last = this.cols - 1;
     let ratio;
     let ratios = [];
     for (let i = start; i < this.rows; i++) {
@@ -118,7 +138,7 @@ class Tableau {
 
     let isThereValidRatios = false;
     for (let i = 0; i < ratios.length; i++) {
-      if (ratios[i] > 0 && ratios[i] < Infinity) {
+      if (ratios[i] > precision && ratios[i] < Infinity) {
         isThereValidRatios = true;
         break;
       }
@@ -128,7 +148,7 @@ class Tableau {
     let currentMinimum = Infinity;
     let minIndex;
     for (let i = 0; i < ratios.length; i++) {
-      if (ratios[i] > 0 && ratios[i] < currentMinimum) {
+      if (ratios[i] > precision && ratios[i] < currentMinimum) {
         currentMinimum = ratios[i];
         minIndex = i;
       }
@@ -142,8 +162,8 @@ class Tableau {
     let index;
     this.artificial == false ? start = 1 : start = 2;
     let minimum = Infinity;
-    for(let i=start; i < this.tableau[0].length - 1; i++){
-      if(this.tableau[0][i] < minimum){
+    for (let i = start; i < this.tableau[0].length - 1; i++) {
+      if (this.tableau[0][i] < minimum) {
         index = i;
         minimum = this.tableau[0][i];
       }
@@ -228,10 +248,10 @@ class Tableau {
     let baseIndex = this.base_vars.indexOf(label);
     this.artificial == true ? baseIndex += 2 : baseIndex += 1;
     for (let i = 0; i < this.rows; i++) {
-      if (i != baseIndex && this.tableau[i][col] != 0) {
+      if (i != baseIndex && isZero(this.tableau[i][col]) == false) {
         return false;
       }
-      if (i == baseIndex && this.tableau[i][col] != 1) {
+      if (i == baseIndex && isEqual(this.tableau[i][col] , 1) == false) {
         return false;
       }
     }
@@ -267,7 +287,7 @@ class Tableau {
     }
   }
 
-  minOrMax(){
+  minOrMax() {
     let signal;
     let result;
     this.artificial == true ? signal = Math.sign(this.tableau[1][1]) : signal = Math.sign(this.tableau[0][0]);
@@ -307,7 +327,7 @@ class Tableau {
     let colInTableau;
     for (let i = 0; i < vars.length; i++) {
       colInTableau = this.standard_vars.indexOf(vars[i][0]);
-      if (this.tableau[0][colInTableau] == 0 && vars[i][2] == "VNB") {
+      if (isZero(this.tableau[0][colInTableau]) == true && vars[i][2] == "VNB") {
         return true;
       }
     }
