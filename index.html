@@ -1,6 +1,7 @@
 <html>
 
 <head>
+  <meta charset="UTF-8">
   <script src="jquery-3.3.1.min.js"></script>
   <script src="library.js"></script>
   <script src="pageCreation.js"></script>
@@ -18,11 +19,12 @@
 
   <div id="instructions">
     <p> Insira a função objetivo e as restrições conforme as recomendações a seguir. </p>
+    <p><span id="test-phase">Esta ferramenta está em fase de testes. Use com cautela!</span></p>
     <ol>
       <li>Todas as variáveis de decisão são consideradas <strong>não-negativas</strong>;</li>
       <li>Caso seja necessário contabilizar uma variável de decisão sem restrição de sinal, substitua em seu programa a variável por uma diferença de variáveis não-negativas (e.g. troque X1 por X1 - X2 em seu sistema original, faça as modificações necessárias
         e então insira na tabela);</li>
-      <li>O segundo membro (termo independente) de cada restrição <strong>deve ser positivo</strong>. Caso uma restrição possua segundo membro negativo, multiplique por -1 e então insira a restrição resultante na tabela. Exemplo: troque 3X1 + 2X2 ≥ -4 por
+      <li>O segundo membro (termo independente) de cada restrição <strong>deve ser não-negativo</strong>. Caso uma restrição possua segundo membro negativo, multiplique por -1 e então insira a restrição resultante na tabela. Exemplo: troque 3X1 + 2X2 ≥ -4 por
         -3X1 - 2X2 ≤ +4. Lembre-se de inverter os comparadores ≤ e ≥ ao fazer este processo!</li>
     </ol>
     <p>

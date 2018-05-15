@@ -42,21 +42,31 @@ var quadro;
 var read;
 
 var specialCase = false;
+var impossibleFirstPhase = false;
 
 
 $(document).ready(function() {
 
   $("#vds-read").keypress(function(e) {
       var char = String.fromCharCode(e.which);
+      if (e.which == 13) {
+        $('#first-input-submit-button').click();
+      }
       if ("1234567890".indexOf(char) < 0)
           return false;
   });
 
   $("#consts-read").keypress(function(e) {
       var char = String.fromCharCode(e.which);
+      if (e.which == 13) {
+        $('#first-input-submit-button').click();
+      }
       if ("1234567890".indexOf(char) < 0)
           return false;
   });
+
+
+
 
   //inputSetup();
   let vdsread;
@@ -122,12 +132,12 @@ $(document).ready(function() {
       insertNotification("A função objetivo não pode ser identicamente nula.");
     }
 
-    if (invalidBValues.length != 0) {
-      validInput = false;
-      let string = "O segundo membro de uma restrição não pode ser nulo ou negativo. <i>Se for negativo, você pode corrigir usando a instrução 3</i>. Restrições afetadas: ";
-      string += invalidBValues.join(", ");
-      insertNotification(string);
-    }
+    // if (invalidBValues.length != 0) {
+    //   validInput = false;
+    //   let string = "O segundo membro de uma restrição não pode ser negativo. <i>Se for negativo, você pode corrigir usando a instrução 3</i>. Restrições afetadas: ";
+    //   string += invalidBValues.join(", ");
+    //   insertNotification(string);
+    // }
 
     if (invalidConstsLines.length != 0) {
       validInput = false;
@@ -136,14 +146,25 @@ $(document).ready(function() {
       insertNotification(string);
     }
 
-    if (!ofValidity || invalidBValues.length != 0 || invalidConstsLines.length != 0) {
+    // if (!ofValidity || invalidBValues.length != 0 || invalidConstsLines.length != 0) {
+    //   $("html, body").animate({
+    //     scrollTop: $("#notifications-container").offset().top
+    //   }, 300);
+    // }
+
+    if (!ofValidity || invalidConstsLines.length != 0) {
       $("html, body").animate({
         scrollTop: $("#notifications-container").offset().top
       }, 300);
     }
 
+    checkAndInvert(vdsread, constsread);
+
     if (validInput) {
 
+      $("html, body").animate({
+        scrollTop: $("#table_container").offset().top
+      }, 300);
 
 
 
@@ -159,6 +180,8 @@ $(document).ready(function() {
       printSingleTableau(quadro, iterations);
       iterations++;
 
+      impossibleFirstPhase = false;
+
       if (quadro.artificial_vars.length != 0) {
         for (let a = 0; a < quadro.artificial_vars.length; a++) {
           let index = quadro.standard_vars.indexOf(quadro.artificial_vars[a]);
@@ -168,10 +191,13 @@ $(document).ready(function() {
             break;
           };
         }
+        if(quadro.isOptimal() == true){
+          impossibleFirstPhase = true;
+        }
       }
 
 
-      while (quadro.isOptimal() == false) {
+      while (impossibleFirstPhase == false && quadro.isOptimal() == false) {
 
         enteringVar = quadro.chooseEnteringVar();
         toBePivotRow = quadro.choosePivotRow(enteringVar);
@@ -208,9 +234,8 @@ $(document).ready(function() {
         } else if (quadro.artificial == true && quadro.isOptimal() == true) {
           //Impossible to nullify artificial objective function
           iterations++;
-          printSingleTableau(quadro, iterations);
-          $(".tableau:last-child").after("<p>É impossível zerar a função objetivo artificial. O problema não tem solução.</p>");
           specialCase = true;
+          impossibleFirstPhase = true;
           break;
         }
 
@@ -221,7 +246,7 @@ $(document).ready(function() {
 
       // prints last iteration, final tableau
 
-      if (quadro.hasMultipleSolutions() == true && specialCase == false) {
+      if (quadro.hasMultipleSolutions() == true && specialCase == false && impossibleFirstPhase == false) {
         printSingleTableau(quadro, iterations);
         $(".tableau:last-child").after("<p>O problema tem múltiplas (infinitas) soluções ótimas.</p>");
       }
@@ -229,6 +254,12 @@ $(document).ready(function() {
       if (quadro.hasMultipleSolutions() == false && specialCase == false) {
         printSingleTableau(quadro, iterations);
         $(".tableau:last-child").after("<p>O problema tem uma única solução ótima.</p>");
+      }
+
+      if (impossibleFirstPhase == true) {
+        //Impossible to nullify artificial objective function
+        printSingleTableau(quadro, iterations);
+        $(".tableau:last-child").after("<p>É impossível zerar a função objetivo artificial para as restrições do tipo (>=) inseridas.</p>");
       }
 
 

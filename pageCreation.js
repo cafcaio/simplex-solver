@@ -93,7 +93,7 @@ function invalidBs(consts){
     let currentBValue = $(".b-values").eq(i).val();
     currentBValue = parseFloat(currentBValue);
     if(isNaN(currentBValue)) currentBValue = 0;
-    if(currentBValue <= 0){
+    if(currentBValue < 0){
       answer.push(i);
     }
 
@@ -112,7 +112,7 @@ function invalidConsts(vars, consts){
       let value = $(".const-values").eq(i * vars + j).val();
       value = parseFloat(value);
       if(isNaN(value)) value = 0;
-      if(value > 0){
+      if(value != 0){
         lineInvalid = false;
         break;
       }
@@ -192,6 +192,36 @@ function readFirstInput() {
   let vds = parseFloat($("#vds-read").val());
   let consts = parseFloat($("#consts-read").val());
   return [vds, consts];
+}
+
+function invertedIfNeeded(string, i){
+  if("string" === less && parseFloat($(".b-values").eq(i).val()) < 0) {
+    return "greater";
+  } else if ("string" === greater && parseFloat($(".b-values").eq(i).val()) < 0) {
+    return "less";
+  } else {
+    return string;
+  }
+}
+
+function checkAndInvert(vars, consts){
+  for (let i = 0; i < consts; i++) {
+    let b_value = parseFloat($(".b-values").eq(i).val());
+    if(b_value < 0){
+      for(let j = 0; j < vars; j++){
+      let value = parseFloat($(".const-values").eq(i * vars + j).val());
+      if (!isNaN(value)) {
+        $(".const-values").eq(i * vars + j).val(String(-value));
+      }
+    }
+    $(".b-values").eq(i).val(String(-b_value));
+    if($(".LEQ").eq(i).val() === "less"){
+      $(".LEQ").eq(i).val("greater");
+    } else if($(".LEQ").eq(i).val() === "greater"){
+      $(".LEQ").eq(i).val("less");
+    }
+  }
+}
 }
 
 function readTableInput(vars, consts) {
